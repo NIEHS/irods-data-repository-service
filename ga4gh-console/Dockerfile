@@ -5,7 +5,7 @@ LABEL description="GA4GH iRODS DRS Console"
 ADD runit.sh /
 ADD drscon.sh /
 
-ADD target/ga4gh-console-0.0.2-SNAPSHOT.jar /ga4gh-console-0.0.2-SNAPSHOT.jar
+COPY target/ga4gh-console-0.0.2-SNAPSHOT.jar /ga4gh-console-0.0.2-SNAPSHOT.jar
 ENTRYPOINT ["/runit.sh"]
 #CMD ["/runit.sh"]
 
