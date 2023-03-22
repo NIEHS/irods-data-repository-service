@@ -30,3 +30,4 @@ JargonVersion.java
 **/*.*~
 *.*~
 .dbeaver*
+**/.factorypath

@@ -81,10 +81,7 @@ The DRS console is a docker image that is a thin client to iRODS. This can be st
 built as part of this package. It can be found under the ga4gh-console. The docker container can be started with the following:
 
 ```
-(base) ~/Documents/workspace-niehs-dev/ga4gh-dos/ga4gh-console @ ALMBP-02010755(conwaymc): docker run -it  michaelconway/ga4gh-console:0.0.1
-No cert to import
-exec drscon.sh to run drs console
-/ # 
+docker run -it  michaelconway/ga4gh-console:0.0.1
 
 ```
 
@@ -172,36 +169,6 @@ Command 'ipwd' exists but is not currently available because you are not connect
 Details of the error have been omitted. You can use the stacktrace command to print the full stacktrace.
 shell:>iinit --host server4.local --zone zone1 --user test1 --password test
 Connected to zone1 as user: test1
-shell:>ipwd
-/zone1/home/test1
-shell:>ils
-/zone1/home/test1
-	/zone1/home/test1/bun1	COLLECTION	
-	/zone1/home/test1/bun2	COLLECTION	
-	/zone1/home/test1/cacheServiceTempDir	COLLECTION	
-	/zone1/home/test1/epigenomics	COLLECTION	
-	/zone1/home/test1/fedread	COLLECTION	
-	/zone1/home/test1/fedwrite	COLLECTION	
-	/zone1/home/test1/grpEpi	COLLECTION	
-	/zone1/home/test1/grpEpi2	COLLECTION	
-	/zone1/home/test1/jargon-scratch	COLLECTION	
-	/zone1/home/test1/MultipleFilesUnderUserHomeBug262	COLLECTION	
-	/zone1/home/test1/project-indexer-scratch	COLLECTION	
-	/zone1/home/test1/reg	COLLECTION	
-	/zone1/home/test1/study	COLLECTION	
-	/zone1/home/test1/testCreateUserHomeDirViaProxy	COLLECTION	
-	iscan.xlsx	DATA_OBJECT	11855
-
-shell:>icd study
-/zone1/home/test1/study
-shell:>imakedrsb
-created bundle with GUID:b670ec6a-78d2-438f-a180-885f49a016b4
-shell:>ilistdrsb
-893e11fd-aed6-4a62-b012-8057b55c8870	/zone1/home/test1/bun1
-1d5a8b9f-b351-41f6-8d86-f06bd15e2ef2	/zone1/home/test1/bun2
-b670ec6a-78d2-438f-a180-885f49a016b4	/zone1/home/test1/study
-
-shell:>
 	
 ```
 
@@ -239,7 +206,7 @@ This creates a set of files with a prefix name (defaults to 100 byte files of ra
 So in order to create a test bundle from the console, issue a series of commands like so:
 
 ```
-shell:>maketestbundle testbundle2
+shell:>maketestbundle /tempZone/home/test1/testbundle2
 test bundle created at:/tempZone/home/test1/testbundle2
 
 shell:>icd testbundle2
@@ -307,7 +274,7 @@ curl -X GET \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MSIsImlzcyI6Imlyb2RzLXJlc3QyIiwiaWF0IjoxNTgxMTAyMTkxfQ._XeZqqUi4MHmsxQdTyr-XcktnRaqtvRUToCGJq2rwL0QfGO9OSlKgf2OzknQtvl4F_i10oN-FBcT_uDO5gBuFg'
   
-  ...
+ 
   
   {
     "url": "http://irods-rest:8888/fileStream?path=/zone1/home/test1/study/MuscleNGS/10-17-2017 POLG Muscle NGS project proposal.docx",
