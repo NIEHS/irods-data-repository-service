@@ -10,7 +10,7 @@
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<jargon.version>4.3.2.6-SNAPSHOT</jargon.version>
+		<jargon.version>4.3.3.0-RELEASE</jargon.version>
 		<spring.security.version>4.2.4.RELEASE</spring.security.version>
 		<springfox-version>2.7.0</springfox-version>
 	</properties>
