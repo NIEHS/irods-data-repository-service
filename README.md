@@ -74,6 +74,19 @@ to run the framework
 docker-compose up -V
 ```
 
+You should see the following containers running if you execute ```docker ps```
+
+```
+ docker ps
+CONTAINER ID   IMAGE                                COMMAND                 CREATED         STATUS         PORTS                              NAMES
+48467cc21fe7   michaelconway/ga4gh-drs:latest       "/runit.sh"             9 minutes ago   Up 9 minutes   0.0.0.0:8080->8080/tcp             irods-drs
+be61459d12ae   michaelconway/irods-rest2:1.0.1      "/runit.sh"             9 minutes ago   Up 9 minutes   0.0.0.0:8888->8080/tcp             irods-rest
+734d13a1c4d6   michaelconway/ga4gh-console:latest   "/runit.sh"             9 minutes ago   Up 9 minutes                                      ga4gh_console
+48413ccdcb89   compose_irods-catalog-provider       "./start_provider.sh"   9 minutes ago   Up 9 minutes   0.0.0.0:1247->1247/tcp, 1248/tcp   irods-catalog-provider
+```
+
+
+
 ### Interact with Swagger UI
 
 You can find the swagger UI at http://localhost:8080/ga4gh/drs/v1/swagger-ui.html
@@ -81,31 +94,12 @@ You can find the swagger UI at http://localhost:8080/ga4gh/drs/v1/swagger-ui.htm
 ### Create some bundles with the console
 
 The DRS console is a docker image that is a thin client to iRODS. This can be started as a stand-alone docker image, and the code is
-built as part of this package. It can be found under the ga4gh-console. The docker container can be started with the following:
+built as part of this package. It can be found under the ga4gh-console. This container is already running under compose, so you can 
+open a bash session inside the running container
 
 ```
-docker run -it  michaelconway/ga4gh-console:0.0.1
+docker exec -it ga4gh_console bash
 
-```
-
-The DRS console is also started as part of the docker compose setup and can talk to the iRODS in the same test bundle. If you have started the compose 
-rig, you can see the various containers:
-
-```
-conwaymc@ALMBP02246093 ~ % docker ps
-CONTAINER ID   IMAGE                               COMMAND                 CREATED         STATUS         PORTS                              NAMES
-028aad21c982   michaelconway/ga4gh-drs:0.0.2       "/runit.sh"             4 minutes ago   Up 4 minutes   0.0.0.0:8080->8080/tcp             irods-drs
-8108f5f88442   michaelconway/irods-rest2:1.0.1     "/runit.sh"             4 minutes ago   Up 4 minutes   0.0.0.0:8888->8080/tcp             irods-rest
-e257863f9158   michaelconway/ga4gh-console:0.0.2   "/runit.sh"             4 minutes ago   Up 4 minutes                                      ga4gh_console
-c50f92d507f4   compose_irods-catalog-provider      "./start_provider.sh"   4 minutes ago   Up 4 minutes   0.0.0.0:1247->1247/tcp, 1248/tcp   irods-catalog-provider
-conwaymc@ALMBP02246093 ~ %
-
-```
-
-Using compose you can issue the command:
-
-```
-docker exec -it ga4gh_console sh
 ```
 
 This puts you at an interactive prompt. In the current directory you will find an ./drscon.sh script that can start the console
@@ -178,51 +172,46 @@ Connected to zone1 as user: test1
 A bundle is a collection of iRODS files, where each object in the collection is a DRS Object. In order to facilitate testing the console
 includes a helper command to generate a test collection of files in iRODS that can be made into a bundle.
 
-```
-shell:>help maketestbundle
-
-
-NAME
-	maketestbundle - Create test bundle
-
-SYNOPSYS
-	maketestbundle [--directory] string  [[--files] string]  [[--filePrefix] string]
-
-OPTIONS
-	--directory  string
-
-		[Mandatory]
-
-	--files  string
-
-		[Optional, default = 10]
-
-	--filePrefix  string
-
-		[Optional, default = file]
-
-
-```
-
 This creates a set of files with a prefix name (defaults to 100 byte files of random data to generate unique checksums). By default 10 files are created but that number can be adjusted.
 
 So in order to create a test bundle from the console, issue a series of commands like so:
 
 ```
-shell:>maketestbundle /tempZone/home/test1/testbundle2
+maketestbundle /tempZone/home/test1/testbundle2
+```
+
+This should give the following result
+
+```
 test bundle created at:/tempZone/home/test1/testbundle2
+```
+Now you can change into that iRODS collection of dummy data:
 
-shell:>icd testbundle2
-/tempZone/home/test1/testbundle2
+```
+icd testbundle2
 
-shell:>imakedrsb
+```
+
+This puts you in the directory within which you want to create the DRS bundle. The 'imakedrsb' command will take the iRODS
+collection just created and add metadata that marks it as a DRS bundle.
+
+```
+
+imakedrsb
+
+```
+
+Issuing this command should result in a response that indicates the GUID of the bundle just created:
+
+```
+
 created bundle with GUID:43606067-6cc1-410d-bdd5-e875e1841f14
-
 
 ```
 
 
 Note that the bundle GUID is provided...You can use this in your DRS requests
+
 
 ### Authenticate and obtain a bearer token
 
