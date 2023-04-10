@@ -31,7 +31,7 @@ services:
       - "8888:8080"
   irods-drs: 
     container_name: irods-drs
-    image: michaelconway/ga4gh-drs:0.0.2
+    image: michaelconway/ga4gh-drs:latest
     build:
         context: ..
         dockerfile: Dockerfile
@@ -44,7 +44,7 @@ services:
     ports: 
       - "8080:8080"
   ga4gh-console:
-    image: michaelconway/ga4gh-console:0.0.2
+    image: michaelconway/ga4gh-console:latest
     container_name: ga4gh_console
     build:
         context: ../../ga4gh-console

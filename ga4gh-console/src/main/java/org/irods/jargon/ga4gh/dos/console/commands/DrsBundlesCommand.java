@@ -21,6 +21,7 @@ import org.irods.jargon.ga4gh.dos.bundle.internalmodel.BundleInfoAndPath;
 import org.irods.jargon.ga4gh.dos.bundlemgmnt.DosBundleManagementService;
 import org.irods.jargon.ga4gh.dos.bundlemgmnt.exception.BundleNotFoundException;
 import org.irods.jargon.ga4gh.dos.bundlemgmnt.exception.DuplicateBundleException;
+import org.irods.jargon.ga4gh.dos.bundlemgmnt.utils.BundleUtils;
 import org.irods.jargon.ga4gh.dos.console.context.DrsConsoleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -265,67 +266,16 @@ public class DrsBundlesCommand {
 		log.info("directory:{}", directory);
 		log.info("numberOfFiles:{}", numberOfFiles);
 
-		// verify that the dir is empty
-
-		IRODSFile bundleDir;
-
+		BundleUtils bundleUtils = new BundleUtils(this.drsConsoleContext.getIrodsAccessObjectFactory(), this.drsConsoleContext.getIrodsAccount());
 		try {
-
-			if (directory.startsWith("/")) {
-				log.info("process as absolute path");
-				bundleDir = drsConsoleContext.getIrodsFileFactory().instanceIRODSFile(directory);
-			} else {
-				log.info("process as relative path");
-				bundleDir = drsConsoleContext.getIrodsFileFactory().instanceIRODSFile(wd, directory);
-			}
-
-			if (bundleDir.exists()) {
-				log.error("file exists, cannot create a test directory");
-				return "The directory exists, cannot create a test directory with that name";
-			}
-			
-			// make the dir, then add a number of child files
-			bundleDir.mkdirs();
-			
-			
-			for (int i=0; i < nbrFiles; i++) {
-				String fileName = filePrefix + String.valueOf(i);
-				
-				IRODSFile irodsFile = drsConsoleContext.getIrodsFileFactory().instanceIRODSFile(bundleDir.getAbsolutePath(), fileName);
-				IRODSFileOutputStream irodsFileOutputStream = drsConsoleContext.getIrodsFileFactory().instanceIRODSFileOutputStream(irodsFile,
-						OpenFlags.READ_WRITE, true);
-
-				byte[] myBytesArray = this.randomString(fileLength).getBytes();
-				irodsFileOutputStream.write(myBytesArray);
-				irodsFile.close();	
-				
-			}
-			
-			log.info("wrote bundle files");
-			
-			return "test bundle created at:" + bundleDir.getAbsolutePath();
-		} catch (JargonException | IOException e) {
-			log.error("exception getting file:{}", e);
-			throw new JargonRuntimeException("error getting file", e);
-		} finally {
-			drsConsoleContext.getIrodsAccessObjectFactory().closeSessionAndEatExceptions();
+			return bundleUtils.createTestBundle(directory, Integer.parseInt(numberOfFiles),  Integer.parseInt(numberOfFiles), filePrefix);
+		} catch (NumberFormatException | JargonException e) {
+			log.error("exception creating test bundle:{}", e);
+			throw new JargonRuntimeException("error creating test bundle", e);
 		}
 	}
 	
-	public String randomString(int stringLength) {
-	    int leftLimit = 48; // numeral '0'
-	    int rightLimit = 122; // letter 'z'
-	    int targetStringLength = stringLength;
-	    Random random = new Random();
-
-	    String generatedString = random.ints(leftLimit, rightLimit + 1)
-	      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-	      .limit(targetStringLength)
-	      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-	      .toString();
-	    
-	    return generatedString;
-	}
+	
 	   /* Random random = new Random();
 
 	    String generatedString = random.ints(leftLimit, rightLimit + 1)

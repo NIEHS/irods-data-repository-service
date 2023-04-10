@@ -1,5 +1,6 @@
 .DS_Store
 *.log
+<<<<<<< HEAD
 .factorypath
 **/test.dos.properties
 **/Ga4ghVersion.java
@@ -11,3 +12,17 @@
 target/
 .idea/
 .project
+=======
+*/nbactions.xml  
+*.eml
+nbactions.xml
+testing.properties
+test.dos.properties
+*/test-output
+JargonVersion.java
+**/${test.option.mount.basedir}
+**/*.*~
+*.*~
+.dbeaver*
+**/.factorypath
+>>>>>>> master

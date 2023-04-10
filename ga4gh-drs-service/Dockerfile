@@ -4,7 +4,7 @@ LABEL maintainer="mike.conway@nih.gov"
 LABEL description="iDRS - GA4GH iRODS DOS"
 ADD runit.sh /
 
-ADD target/ga4gh-drs-service-0.0.2-SNAPSHOT.jar /ga4gh-drs-service-0.0.2-SNAPSHOT.jar
+COPY target/ga4gh-drs-service-0.0.2-SNAPSHOT.jar /ga4gh-drs-service-0.0.2-SNAPSHOT.jar
 ENTRYPOINT ["/runit.sh"]
 #CMD ["/runit.sh"]
 
