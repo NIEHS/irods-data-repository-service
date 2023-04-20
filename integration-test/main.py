@@ -12,11 +12,11 @@ logging.basicConfig(level=logging.DEBUG)
 # This is an initial test that illustrates a proposed test sequence. This is provisional until more
 # formal GA4GH integration testing can be implemented.
 
-rest_host = "http://localhost:8888/"
-drs_host = "http://localhost:8080/"
-irods_user = "test1"
-irods_password = "test"
-drs_bundle_id = "9ac9a341-b887-454b-9b24-28ac251147a7" # insert your own bundle id!
+rest_host = "http://xxx:8888/"
+drs_host = "http://xxx:8080/"
+irods_user = "xxx"
+irods_password = "xxx"
+drs_bundle_id = "09b1be1b-c1da-47eb-9f72-165cea37849b" # insert your own bundle id!
 
 
 def test_sequence():

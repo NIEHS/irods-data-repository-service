@@ -1,0 +1,30 @@
+{
+"service_info": {
+"auth_type": "bearer",
+"auth_token": "puttokenhere"
+},
+"drs_objects" : [
+{"drs_id": "09b1be1b-c1da-47eb-9f72-165cea37849b",
+"auth_type": "bearer",
+"auth_token": "puttokenhere",
+"is_bundle": true
+},
+{
+"drs_id" : "4565cecf-350a-480c-b863-44801c1ecb65",
+"auth_type": "bearer",
+"auth_token": "puttokenhere",
+"is_bundle": true
+},
+{
+"drs_id" : "4b109016-a483-4499-b72f-2a24b1dd8ae6",
+"auth_type": "bearer",
+"auth_token": "puttokenhere",
+"is_bundle": true
+}, {
+"drs_id" : "ba81b632-582c-4f31-9ce0-7b20e558dab0",
+"auth_type": "bearer",
+"auth_token": "puttokenhere",
+"is_bundle": false
+}
+]
+}
