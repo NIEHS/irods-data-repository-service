@@ -96,7 +96,7 @@ public class ObjectsApiController implements ObjectsApi {
 
     public ResponseEntity<AccessURL> getAccessURL(@Parameter(in = ParameterIn.PATH, description = "`DrsObject` identifier", required=true, schema=@Schema()) @PathVariable("object_id") String objectId,@Parameter(in = ParameterIn.PATH, description = "An `access_id` from the `access_methods` list of a `DrsObject`", required=true, schema=@Schema()) @PathVariable("access_id") String accessId) {
     	 String accept = request.getHeader("Accept");
-         if (accept != null && accept.contains("application/json")) {
+         if (accept == null || accept.contains("application/json")) {
              try {
 
  				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -137,7 +137,7 @@ public class ObjectsApiController implements ObjectsApi {
 
     public ResponseEntity<DrsObject> getObject(@Parameter(in = ParameterIn.PATH, description = "`DrsObject` identifier", required=true, schema=@Schema()) @PathVariable("object_id") String objectId,@Parameter(in = ParameterIn.QUERY, description = "If false and the object_id refers to a bundle, then the ContentsObject array contains only those objects directly contained in the bundle. That is, if the bundle contains other bundles, those other bundles are not recursively included in the result. If true and the object_id refers to a bundle, then the entire set of objects in the bundle is expanded. That is, if the bundle contains aother bundles, then those other bundles are recursively expanded and included in the result. Recursion continues through the entire sub-tree of the bundle. If the object_id refers to a blob, then the query parameter is ignored." ,schema=@Schema()) @Valid @RequestParam(value = "expand", required = false) Boolean expand) {
     	 String accept = request.getHeader("Accept");
-         if (accept != null && accept.contains("application/json")) {
+         if (accept == null || accept.contains("application/json")) {
              	try {
          			log.info("getObject()");
          			if (objectId == null || objectId.isEmpty()) {
@@ -279,7 +279,7 @@ public class ObjectsApiController implements ObjectsApi {
 
     public ResponseEntity<AccessURL> postAccessURL(@Parameter(in = ParameterIn.PATH, description = "`DrsObject` identifier", required=true, schema=@Schema()) @PathVariable("object_id") String objectId,@Parameter(in = ParameterIn.PATH, description = "An `access_id` from the `access_methods` list of a `DrsObject`", required=true, schema=@Schema()) @PathVariable("access_id") String accessId,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Object body) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept == null || accept.contains("application/json")) {
             try {
                 return new ResponseEntity<AccessURL>(objectMapper.readValue("{\n  \"headers\" : \"Authorization: Basic Z2E0Z2g6ZHJz\",\n  \"url\" : \"url\"\n}", AccessURL.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
@@ -293,7 +293,7 @@ public class ObjectsApiController implements ObjectsApi {
 
     public ResponseEntity<DrsObject> postObject(@Parameter(in = ParameterIn.PATH, description = "`DrsObject` identifier", required=true, schema=@Schema()) @PathVariable("object_id") String objectId,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Object body) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept == null || accept.contains("application/json")) {
             try {
                 return new ResponseEntity<DrsObject>(objectMapper.readValue("{\n  \"checksums\" : [ {\n    \"checksum\" : \"checksum\",\n    \"type\" : \"sha-256\"\n  }, {\n    \"checksum\" : \"checksum\",\n    \"type\" : \"sha-256\"\n  } ],\n  \"created_time\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"updated_time\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"aliases\" : [ \"aliases\", \"aliases\" ],\n  \"description\" : \"description\",\n  \"self_uri\" : \"drs://drs.example.org/314159\",\n  \"version\" : \"version\",\n  \"size\" : 0,\n  \"mime_type\" : \"application/json\",\n  \"access_methods\" : [ {\n    \"access_url\" : {\n      \"headers\" : \"Authorization: Basic Z2E0Z2g6ZHJz\",\n      \"url\" : \"url\"\n    },\n    \"access_id\" : \"access_id\",\n    \"type\" : \"s3\",\n    \"region\" : \"us-east-1\"\n  }, {\n    \"access_url\" : {\n      \"headers\" : \"Authorization: Basic Z2E0Z2g6ZHJz\",\n      \"url\" : \"url\"\n    },\n    \"access_id\" : \"access_id\",\n    \"type\" : \"s3\",\n    \"region\" : \"us-east-1\"\n  } ],\n  \"contents\" : [ {\n    \"contents\" : [ null, null ],\n    \"name\" : \"name\",\n    \"id\" : \"id\",\n    \"drs_uri\" : \"drs://drs.example.org/314159\"\n  }, {\n    \"contents\" : [ null, null ],\n    \"name\" : \"name\",\n    \"id\" : \"id\",\n    \"drs_uri\" : \"drs://drs.example.org/314159\"\n  } ],\n  \"name\" : \"name\",\n  \"id\" : \"id\"\n}", DrsObject.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {

@@ -99,7 +99,7 @@ public class ServiceInfoApiController implements ServiceInfoApi {
     	log.info("getServiceInfo()");
     	log.info("dosConfiguration:{}", dosConfiguration);
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept == null || accept.contains("application/json")) {
             	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
  				String name = auth.getName();
  				log.info("name:{}", name);
