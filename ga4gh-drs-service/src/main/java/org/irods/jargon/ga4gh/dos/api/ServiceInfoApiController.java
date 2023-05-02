@@ -26,14 +26,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 public class ServiceInfoApiController implements ServiceInfoApi {
 
-    private static final Logger log = LoggerFactory.getLogger(ServiceInfoApiController.class);
+	private static final Logger log = LoggerFactory.getLogger(ServiceInfoApiController.class);
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    private final HttpServletRequest request;
+	private final HttpServletRequest request;
 
-
-    public DosServiceFactory getDosServiceFactory() {
+	public DosServiceFactory getDosServiceFactory() {
 		return dosServiceFactory;
 	}
 
@@ -66,53 +65,47 @@ public class ServiceInfoApiController implements ServiceInfoApi {
 	}
 
 	@Autowired
-   	private DosServiceFactory dosServiceFactory;
+	private DosServiceFactory dosServiceFactory;
 
-   	@Autowired
-   	private ContextAccountHelper contextAccountHelper;
+	@Autowired
+	private ContextAccountHelper contextAccountHelper;
 
-   	@Autowired
-   	private DosConfiguration dosConfiguration;
+	@Autowired
+	private DosConfiguration dosConfiguration;
 
-   	@Autowired
-   	private IRODSSession irodsSession;
+	@Autowired
+	private IRODSSession irodsSession;
 
+	@org.springframework.beans.factory.annotation.Autowired
+	public ServiceInfoApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+		this.objectMapper = objectMapper;
+		this.request = request;
+	}
 
-    @org.springframework.beans.factory.annotation.Autowired
-    public ServiceInfoApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
-        this.request = request;
-    }
+	@Override
+	public Optional<ObjectMapper> getObjectMapper() {
+		return Optional.ofNullable(objectMapper);
+	}
 
-    @Override
-    public Optional<ObjectMapper> getObjectMapper() {
-        return Optional.ofNullable(objectMapper);
-    }
+	@Override
+	public Optional<HttpServletRequest> getRequest() {
+		return Optional.ofNullable(request);
+	}
 
-    @Override
-    public Optional<HttpServletRequest> getRequest() {
-        return Optional.ofNullable(request);
-    }
-
-    @Override
+	@Override
 	public ResponseEntity<InlineResponse200> getServiceInfo() {
-    	log.info("getServiceInfo()");
-    	log.info("dosConfiguration:{}", dosConfiguration);
-        String accept = request.getHeader("Accept");
-        if (accept == null || accept.contains("application/json")) {
-            	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
- 				String name = auth.getName();
- 				log.info("name:{}", name);
- 				IRODSAccount irodsAccount = this.contextAccountHelper.irodsAccountFromAuthentication(name);
+		log.info("getServiceInfo()");
+		log.info("dosConfiguration:{}", dosConfiguration);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
+		log.info("name:{}", name);
+		IRODSAccount irodsAccount = this.contextAccountHelper.irodsAccountFromAuthentication(name);
 
- 				log.debug("irodsAccount:{}", irodsAccount);
+		log.debug("irodsAccount:{}", irodsAccount);
 
- 				ServiceInfoService serviceInfoService =  dosServiceFactory.instanceServiceInfoService(irodsAccount);
- 				return new ResponseEntity<>(serviceInfoService.generateServiceInfoFromConfig(), HttpStatus.OK);
+		ServiceInfoService serviceInfoService = dosServiceFactory.instanceServiceInfoService(irodsAccount);
+		return new ResponseEntity<>(serviceInfoService.generateServiceInfoFromConfig(), HttpStatus.OK);
 
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	}
 
 }
